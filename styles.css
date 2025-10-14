@@ -1,0 +1,27 @@
+/* Vars */
+:root {
+        --orange-color: #CC533E;
+        --blue-color: #0B6971;
+        --text-dark-color: #222009;
+        --font-primary: 'Anisette Std Bold', Arial, sans-serif;
+        --font-secondary: 'Parisine Office Std', sans-serif;
+        --text-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
+        /*--transiting-duration:1.2s;*/
+        --transiting-duration:1s;
+}
+* {
+        user-select: none;
+}
+body {
+        background:#444;
+}
+#main {
+        position:absolute;
+        top:0;
+        left:0;
+        width:1920px;
+        height:1080px;
+        background:var(--blue-color);
+        color: var(--text-dark-color);
+        overflow:hidden;
+}
