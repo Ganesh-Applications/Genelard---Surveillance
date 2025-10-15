@@ -7,13 +7,116 @@
         <link rel="stylesheet" href="reset.css">
         <link rel="stylesheet" href="fonts.css">
         <link rel="stylesheet" href="styles.css">
-        <script type="application/javascript" src="lib/jquery-3.7.1.min.js" defer></script>
-        <script type="application/javascript" src="data.js" defer></script>
+        <script type="application/javascript" src="lib/jquery-3.7.1.min.js"></script>
+        <script type="application/javascript" src="lib/socket.io.min.js"></script>
+        <script type="application/javascript" src="src/data.js"></script>
+        <script type="application/javascript" src="src/game.js" defer></script>
         <script type="application/javascript" src="main.js" defer></script>
 </head>
 <body>
         <div id="main">
-                
+                <div id="home" class="page">
+                        <div class="title">Sous surveillance</div>
+                        <div class="btn">Lancer le jeu</div>
+                </div>
+
+                <div id="instructions" class="page">
+                        <div class="title">Instructions</div>
+                        <div class="instructions-slider">
+                                <div class="slide-prev btn">
+                                        <img src="img/slide-prev.svg" alt="">
+                                </div>
+                                <div class="slides">
+                                        <div class="slide current">
+                                                <p>Pendant l'Occupation, certaines personnes faisaient passer clandestinement des objets d’une zone à l’autre.</p>
+                                                <p>A certains endroits, des femmes les aidaient et accrochaient des draps blancs à leurs fenêtres pour montrer que la voie était libre.</p>
+                                        </div>
+                                        <div class="slide">
+                                                <p>Ce jeu se joue à deux personnes.</p>
+                                                <p>Votre objectif est de faire passer tous les objets de l'autre côté de la ligne en les dissimulant dans les différentes cachettes.</p>
+                                                <p>Le joueur de l'autre côté surveille l'arrivée des patrouilles (lumières rouges) et indique lorsque la voie est libre en mettant des draps aux fenêtres.</p>
+                                        </div>
+                                        <div class="slide">
+                                                <p>Durant le jeu, vous ne devez pas communiquer avec votre partenaire en utilisant la voix...</p>
+                                                <p>Attention, si vous passez la main dans une cachette alors que les patrouilles la surveillent, la partie est finie !</p>
+                                        </div>
+                                </div>
+                                <div class="slide-next btn">
+                                        <img src="img/slide-next.svg" alt="">
+                                </div>
+                        </div>
+                        <div class="slider-dots">
+                                <div class="dot current"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                        </div>
+                        <div class="btn start-game">Jouer maintenant</div>
+                </div>
+
+                <div id="game" class="page current">
+                        <div class="page-inner">
+                                <div class="btn back-to-instructions">
+                                        <img src="img/slide-prev.svg" alt="">
+                                        Revoir les instructions
+                                </div>
+
+                                <div class="score game-score">
+                                        Nombre d'objets passés
+                                        <div class="num-circle">
+                                                <span class="num">8</span>
+                                        </div>
+                                </div>
+
+                                <div class="game-text">
+                                        Faites passer les objets demandés de l'autre côté sans vous faire prendre !
+                                        <div class="subtext">
+                                                Attention, vous n'avez pas le droit de mettre les mains en même temps...
+                                        </div>
+                                </div>
+
+                                <div class="mission-time-legend">
+                                        Temps restant
+                                </div>
+
+                                <div class="missions">
+                                        <!--<div class="mission" data-time="high">
+                                                <div class="mission-image">
+                                                        <img src="img/objects/lait.svg" alt="">
+                                                </div>
+                                                <div class="mission-bar">
+                                                        <div class="mission-title">
+                                                                Cache la bouteille de lait dans la cave à vin
+                                                        </div>
+                                                        <div class="mission-time">
+                                                                30
+                                                        </div>
+                                                </div>
+                                        </div>-->
+                                </div>
+                        </div>
+
+                        <div id="end">
+                                <div class="end-gradient"></div>
+
+                                <div class="end-inner">
+                                        <div class="end-phrase">
+                                                Oh non ! Vous vous êtes fait prendre...
+                                        </div>
+                                        <div class="title">
+                                                Fin de la partie !
+                                        </div>
+                                        <div class="score end-score">
+                                                <div class="num-circle">
+                                                        <div class="num">8</div>
+                                                </div>
+                                                objets transmis avec succès
+                                        </div>
+                                        <div class="btn replay">Rejouer ?</div>
+                                </div>
+                        </div>
+                </div>
+
+                <div id="gradient"></div>
         </div>
 </body>
 </html>
