@@ -24,9 +24,31 @@ export const LED_COLORS = {
         OFF:        [0, 0, 0]
 };
 
+export const PATROLS_MODES = {
+        PATROLLING : 'patrolling',
+        HOLDING : 'holding',
+        // ALERT : 'alert'
+};
+
 export const OBJECTS = [
         {
                 id:'C:3C:70:6',
-                name: 'la bouteille de lait'
+                name: "la bouteille de lait",
+                key: 'lait'
+        },
+        {
+                id:'C:3C:70:6',
+                name: "le fusil",
+                key: 'fusil'
+        },
+        {
+                id:'C:3C:70:6',
+                name: "la boîte d'oeufs",
+                key: 'oeufs'
+        },
+        {
+                id:'C:3C:70:6',
+                name: "la paire de chaussures",
+                key: 'chaussures'
         }
 ]

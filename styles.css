@@ -254,10 +254,10 @@ body {
 #game .missions .mission.visible .mission-image {
         opacity:1;
 }
-#game .missions .mission[data-time="medium"] .mission-image {
+#game .missions .mission[data-time-status="medium"] .mission-image {
         background:#CC533E;
 }
-#game .missions .mission[data-time="low"] .mission-image {
+#game .missions .mission[data-time-status="low"] .mission-image {
         background:#D2232A;
 }
 #game .missions .mission .mission-bar {
@@ -275,10 +275,10 @@ body {
         color:#0B6971;
         line-height: normal;
 }
-#game .missions .mission[data-time="medium"] .mission-bar .mission-title {
+#game .missions .mission[data-time-status="medium"] .mission-bar .mission-title {
         color:#CC533E;
 }
-#game .missions .mission[data-time="low"] .mission-bar .mission-title {
+#game .missions .mission[data-time-status="low"] .mission-bar .mission-title {
         color:#D2232A;
 }
 #game .missions .mission .mission-bar .mission-time {
@@ -291,12 +291,49 @@ body {
         width:110px;
         text-align:center;
 }
-#game .missions .mission[data-time="medium"] .mission-bar .mission-time {
+#game .missions .mission[data-time-status="medium"] .mission-bar .mission-time {
         background:#CC533E;
 }
-#game .missions .mission[data-time="low"] .mission-bar .mission-time {
+#game .missions .mission[data-time-status="low"] .mission-bar .mission-time {
         background:#D2232A;
 }
+
+#game .missions .mission.expired .mission-bar {
+        background:red;
+        opacity:.5;
+}
+#game .led-simulator {
+        position:absolute;
+        bottom:0;
+        left:50%;
+        transform:translateX(-50%);
+        display: flex;
+}
+#game .led-simulator .led {
+        width:10px;
+        height:10px;
+        border-radius:8px;
+        margin-right:5px;
+        background-color:rgba(255, 255, 255, .1);
+        filter:blur(1px);
+        transition:1s;
+}
+#game .led-simulator .led.object-inside {
+        background-color: #e8ff8f;
+        /*transition:.1s;*/
+}
+#game .led-simulator .led.patrol-over {
+        background-color:rgba(255, 0, 0, .2);
+}
+#game .led-simulator .led.patrol-over-active {
+        background-color:red !important;
+        transition:.1s;
+}
+#game .led-simulator .led.last-of-serie:not(:last-child)
+{
+        margin-right:15px;
+}
+
 #end {
         opacity:0;
         pointer-events: none;

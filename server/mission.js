@@ -11,7 +11,7 @@ export default class Mission
                 //-- Objet pour passer les infos de la mission au client
                 this.clientData = {
                         boxName: this.box.name,
-                        objectName: this.object.name
+                        object: this.object
                 };
                 
                 //-- On s'abonne aux événements de la boîte
