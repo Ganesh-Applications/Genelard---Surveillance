@@ -24,11 +24,25 @@ export const LED_COLORS = {
         OFF:        [0, 0, 0]
 };
 
-export const PATROLS_MODES = {
-        PATROLLING : 'patrolling',
-        HOLDING : 'holding',
-        // ALERT : 'alert'
+export const NUM_BOX = 4;
+export const NUM_LEDS_PER_BOX = 10; // tmp
+export const NUM_LEDS = NUM_LEDS_PER_BOX * NUM_BOX;
+
+//-- différents modes de patrouilles
+export const PATROL_MODES = {
+        'patrolling' : {
+                probability: 1,
+                maxSpeed: 1,
+                inertia: 0.01, // on repart plus lentement quand on revient en mode patrouille
+        },
+        'holding' : {
+                probability: 5,
+                maxSpeed: 0.08,
+                inertia: 0.1, // on ralentit plus vite quand on passe en mode "holding"
+        }
 };
+export const PATROLLING = 'patrolling';
+export const HOLDING = 'holding';
 
 export const OBJECTS = [
         {

@@ -7,7 +7,7 @@ export default class ESPHandler
         {
                 this.name = name;
                 
-                // -- Connexion série
+                //-- Connexion série
                 this.port = new SerialPort(
                         {
                                 path: portPath,
@@ -45,7 +45,7 @@ export default class ESPHandler
                 // to be implemented in subclass
         }
         
-        // --- Gestion de la réception ---
+        //--- Gestion de la réception ---
         handleData(data)
         {
                 let json = null;
@@ -56,14 +56,15 @@ export default class ESPHandler
                 }
                 catch (e)
                 {
-                        console.log(`[${this.name}] Non-JSON:`, data);
+                        //console.log(`[${this.name}] Non-JSON:`, data);
+                        // console.log(`[${this.name}] :`, data);
                 }
                 
                 if (json != null)
                         this.updateData(json);
         }
         
-        // --- Envoi de commande JSON ---
+        //--- Envoi de commande JSON ---
         sendCommand(cmd, value)
         {
                 const msg = JSON.stringify({ cmd, value });
@@ -72,6 +73,6 @@ export default class ESPHandler
                         if (err)
                                 return console.error(`[${this.name}] Erreur écriture:`, err.message);
                 });
-                // console.log(`[${this.id}] →`, msg);
+                //console.log(`[${this.name}] →`, msg);
         }
 }

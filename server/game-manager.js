@@ -1,6 +1,7 @@
 import Box from "./box.js";
 import Mission from "./mission.js";
-import { STEPS, LED_COLORS, OBJECTS } from './constants.js';
+import {STEPS, LED_COLORS, OBJECTS} from './constants.js';
+import Patrols from "./patrols.js";
 
 const box1 = new Box("dans la Cave à vin", "/dev/esp1");
 const box2 = new Box("sous le Pont", "/dev/esp2");
@@ -9,13 +10,17 @@ const box4 = new Box("dans le Grenier", "/dev/esp4");
 
 export default class GameManager
 {
-        constructor()
+        constructor(io)
         {
+                this.io = io;
+                
                 this.currentMissions = [];
                 this.createNewMission(box1, OBJECTS[0]);
                 this.createNewMission(box2, OBJECTS[1]);
                 this.createNewMission(box3, OBJECTS[2]);
                 this.createNewMission(box4, OBJECTS[3]);
+                
+                this.patrols = new Patrols();
         }
         
         createNewMission(box, object)
@@ -86,4 +91,5 @@ export default class GameManager
                         gameManager.createNewMission();
                 }, 3000);
         }
+        
 }
