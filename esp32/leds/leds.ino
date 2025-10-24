@@ -1,6 +1,6 @@
 #include <FastLED.h>
 #include <ArduinoJson.h>
-#include <SPI.h>
+//#include <SPI.h>
 
 #define LED_PIN 1
 #define NUM_LEDS 40
@@ -8,7 +8,7 @@
 #define LED_TYPE WS2812B
 #define COLOR_ORDER GRB
 
-struct RGBA {
+struct RGBA {l
   uint8_t r, g, b, a;
 };
 
@@ -74,7 +74,7 @@ void updateLEDs(JsonDocument doc)
     //Serial.println("updateLEDs");
 
     //fill_solid(leds, NUM_LEDS, CRGB::Black);
-    
+
     for (int i = 0; i < NUM_LEDS; i++)
     {
         uint32_t color = doc["value"][i];  // 0xRRGGBBAA
