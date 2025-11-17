@@ -1,3 +1,26 @@
+export const LEDS_PATH = 'COM5';
+
+import Box from "./box.js";
+
+export const BOXES = [
+        {
+                name: "dans la Cave à vin",
+                path: 'dev/esp1'
+        },
+        {
+                name: "sous le Pont",
+                path: 'dev/esp2'
+        },
+        {
+                name: "à la Poste",
+                path: 'dev/esp3'
+        },
+        {
+                name: "dans le Grenier",
+                path: 'dev/esp4'
+        }
+]
+
 export const STEPS = {
         UNSTARTED: 'Mission non démarrée',
         GIVE_SIDE_INSIDE: 'Main du donneur dans la boîte',

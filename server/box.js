@@ -3,8 +3,7 @@ import ESPHandler from "./esp-handler.js";
 const HISTORY_LENGTH = 11;
 
 export default class Box extends ESPHandler
-{
-        init(name)
+{        init(name)
         {
                 this.frontSensor = {
                         name: "front",
@@ -23,7 +22,7 @@ export default class Box extends ESPHandler
                         inside: false
                 }
                 
-                this.rfidSensorValue = 'none';
+                this.objectInside = 'none';
                 
                 this.eventListener = null;
         }
@@ -36,7 +35,7 @@ export default class Box extends ESPHandler
                 // if (json.back_sensor_value !== this.backSensor.currentValue)
                 this.determineHandPresence(this.backSensor, json.back_sensor_value);
                 
-                if (json.rfid_sensor_value !== this.rfidSensorValue)
+                if (json.rfid_sensor_value !== this.objectInside)
                         this.updateRfid(json.rfid_sensor_value);
                 
                 if (this.eventListener != null)
@@ -80,7 +79,7 @@ export default class Box extends ESPHandler
         
         updateRfid(value)
         {
-                this.rfidSensorValue = value;
+                this.objectInside = value;
                 //console.log("RFID:", value);
         }
         

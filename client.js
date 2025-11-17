@@ -51,6 +51,9 @@ function setEventListeners()
        $('#instructions .slide-prev').click(instructionsPrevSlide);
        $('#game .btn.back-to-instructions').click(backToInstructions);
        $('#end .btn.replay').click(replay);
+
+       $('.hand-simulator .box').click(clickHandSimulator);
+       $('.object-simulator .box').click(clickObjectSimulator);
 }
 
 function gotoPage(page)
@@ -199,4 +202,20 @@ function onSocketUpdatePatrols(patrols)
                 if (patrolsPositions.includes(i))
                         $(this).addClass('patrol-over-active');
         });
+}
+
+function clickHandSimulator()
+{
+        let index = $(this).index();
+        $(this).toggleClass('inside');
+        let isInside = $(this).hasClass('inside');
+        socket.emit('hand_in_box', index, isInside);
+}
+
+function clickObjectSimulator()
+{
+        let index = $(this).index();
+        $(this).toggleClass('inside');
+        let isInside = $(this).hasClass('inside');
+        socket.emit('object_in_box', index, isInside);
 }

@@ -35,6 +35,16 @@ io.sockets.on('connection', function(socket)
                 console.log('stop game');
         });
 
+        socket.on('hand_in_box', function(index, isInside)
+        {
+                console.log('Une main', isInside ? 'entre dans la boîte' : 'sort de la boîte', index);
+        });
+
+        socket.on('object_in_box', function(index, isInside)
+        {
+                console.log('Un objet', isInside ? 'entre dans la boîte' : 'sort de la boîte', index);
+                gameManager.boxes[index].objectInside = isInside ? true : 'none';
+        });
         /*let iMission = 0;
         let sendMissionInterval = setInterval(function()
         {

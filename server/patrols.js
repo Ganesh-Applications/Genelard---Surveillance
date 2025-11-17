@@ -3,10 +3,9 @@ import Leds from "./leds.js";
 
 export default class Patrols
 {
-        constructor()
+        constructor(leds)
         {
-                this.leds = new Leds("leds", "COM9");
-                
+                this.leds = leds;
                 this.patrolPos = 0;
                 this.patrolSize = 4;
                 this.patrolDirection = 1;
@@ -109,8 +108,8 @@ export default class Patrols
                 
                 console.log('new mode ', this.patrolMode);
                 
-                let newDelay = this.getNextPatrolModeUpdateDelay();
-                setTimeout(this.updatePatrolMode.bind(this), newDelay);
+                // let newDelay = this.getNextPatrolModeUpdateDelay();
+                // setTimeout(this.updatePatrolMode.bind(this), newDelay);
         }
         
         getRandomPatrolMode()

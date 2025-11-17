@@ -1,5 +1,5 @@
 import ESPHandler from "./esp-handler.js";
-import {NUM_LEDS, NUM_LEDS_PER_BOX, PATROL_MODES} from "./constants.js";
+import {NUM_BOX, NUM_LEDS, NUM_LEDS_PER_BOX, PATROL_MODES} from "./constants.js";
 
 export default class Leds extends ESPHandler
 {
@@ -8,39 +8,51 @@ export default class Leds extends ESPHandler
                 this.ledValues = [];
                 
                 this.flashValue = 0;
-                this.flashDirection = 1;
-                this.flashSpeed = 2;
-                this.maxFlashValue = 20;
-                
-                this.activeBoxes = [0];
-                
-                for (let i = 0; i < NUM_LEDS; i++)
-                {
-                        this.ledValues[i] = 0;
-                }
+                this.flashInc = 0;
+                this.flashSpeed = 0.25;
+                this.maxFlashValue = 255;
+
+                this.ledValues = new Array(NUM_LEDS).fill(0);
+                this.redFactors = new Array(NUM_LEDS).fill(0);
         }
-        
+
+        setBoxes(boxes)
+        {
+                this.boxes = boxes;
+        }
+
         update(patrolsPos)
         {
                 //-- on veut un entier ici
                 patrolsPos = Math.round(patrolsPos);
-                
+
                 this.fadeToBlack();
-                
-                for (let activeBox in this.activeBoxes)
-                        for (let i = this.activeBoxes[activeBox]*NUM_LEDS_PER_BOX; i < this.activeBoxes[activeBox]*NUM_LEDS_PER_BOX+NUM_LEDS_PER_BOX; i++)
-                                this.ledValues[i] = this.getColor(255, 255, 0, this.flashValue);
-                
-                this.flashValue += this.flashDirection * this.flashSpeed;
-                if (this.flashValue > this.maxFlashValue || this.flashValue <= 0)
-                        this.flashDirection *= -1;
-                
-                this.ledValues[patrolsPos-1] = this.getColor(255, 0, 0);
-                this.ledValues[patrolsPos] = this.getColor(255, 0, 0);
-                this.ledValues[patrolsPos+1] = this.getColor(255, 0, 0);
-                
-                // console.log(this.ledValues);
-                
+
+                this.flashValue = (Math.sin(this.flashInc * this.flashSpeed) * 0.5 + 0.5) * this.maxFlashValue;
+                this.flashInc++;
+
+                //-- boîtes qui contiennent des objets : jaune
+                for (let box in this.boxes)
+                        if (this.boxes[box].objectInside != 'none')
+                                for (let i = box * NUM_LEDS_PER_BOX; i < box * NUM_LEDS_PER_BOX + NUM_LEDS_PER_BOX; i++)
+                                        this.ledValues[i] = this.getColor(255, 255 - this.redFactors[i], 0, this.flashValue);
+
+
+                const patrolIndices = [patrolsPos - 1, patrolsPos, patrolsPos + 1];
+                for (let i of patrolIndices)
+                        if (i >= 0 && i < this.ledValues.length)
+                        {
+                                this.redFactors[i] = 255; // <- pour le fade avec le jaune
+                                this.ledValues[i] = this.getColor(255, 0, 0);
+                        }
+
+
+
+                for (let i in this.ledValues)
+                {
+                        this.redFactors[i] *= 0.7;
+                }
+
                 this.sendCommand('led', this.ledValues);
         }
         

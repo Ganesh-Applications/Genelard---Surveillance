@@ -8,7 +8,7 @@
 #define LED_TYPE WS2812B
 #define COLOR_ORDER GRB
 
-struct RGBA {l
+struct RGBA {
   uint8_t r, g, b, a;
 };
 
