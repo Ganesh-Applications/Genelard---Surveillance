@@ -1,21 +1,14 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include <MFRC522.h>
 #include <SPI.h>
 #include <HardwareSerial.h>
 
 // Broches utilisées pour l’UART
-#define RX_PIN 5   // ESP32 reçoit ici (TX du FM-503)
-#define TX_PIN 6   // ESP32 transmet ici (RX du FM-503)
+#define RX_PIN 20   // ESP32 reçoit ici (TX du FM-503)
+#define TX_PIN 21  // ESP32 transmet ici (RX du FM-503)
 
-//-- HC-SR04 Ultrasonic sensor
-#define TRIG_FRONT 21   //-- HC-SR04 avant - Trig
-#define ECHO_FRONT 20   //-- HC-SR04 avant - Echo
-
-#define TRIG_BACK  0   //-- HC-SR04 arri�re - Trig
-#define ECHO_BACK  1   //-- HC-SR04 arri�re - Echo
-
-#define IR_SENSOR_FRONT 3 // Sharp IR GP2Y0A41SK0F Sensor
+#define IR_SENSOR_FRONT 0 // Sharp IR GP2Y0A41SK0F Sensor
+#define IR_SENSOR_BACK 1 // Sharp IR GP2Y0A41SK0F Sensor
 
 //-- Temps entre vérifications capteurs (en ms)
 #define STATUS_DELAY 100  
@@ -48,12 +41,6 @@ void setup()
   Serial.println("Attente de lecture du RFID...");
   delay(1000); // Attente pour que tout soit prêt
 
-  pinMode(TRIG_FRONT, OUTPUT);
-  pinMode(ECHO_FRONT, INPUT);
-
-  pinMode(TRIG_BACK, OUTPUT);
-  pinMode(ECHO_BACK, INPUT);
-
   setRfidPower(RFID_POWER);
 }
 
@@ -84,6 +71,7 @@ void loop()
     updateSensorsStatus();
 
     //-- Si il y a des changements dans les valeurs des capteurs (distance et rfid)
+    //-- (Conditions court-circuitée pour avoir les print en continu)
     if (true || valuesHaveChanged)
     {
         //-- Envoi JSON
@@ -109,7 +97,7 @@ void loop()
       valuesHaveChanged = false;
     }
 
-    lastStatus =    millis();
+    lastStatus =  millis();
   }
 }
 
@@ -144,13 +132,9 @@ void updateSensorsStatus()
 {
   //-- Mesures actuelles
   String newrfidSensorValue = getrfidSensorValue();
+  float newFrontSensorValue = getDistance(IR_SENSOR_FRONT);
+  float newBackSensorValue = getDistance(IR_SENSOR_BACK);
 
-    float voltsFront = analogRead(IR_SENSOR_FRONT) * 0.0008056640625; // value from sensor * (3.3/4096)
-    int newFrontSensorValue = 29.988 * pow( voltsFront, -1.173);
-
-    Serial.print("front sensor : "); Serial.print(newFrontSensorValue);
-    //Serial.print(", back sensor : "); Serial.print(newBackSensorValue);
-    Serial.println();/**/
 
 /*
   //-- Alternance entre les deux capteur de distance
@@ -189,28 +173,15 @@ void updateSensorsStatus()
 }
 
 /**
- * Retourne la distance mesur�e par un HC-SR04 (cm)
+ * Retourne la distance mesur�e par un GP2Y0A41SK0F (cm)
  * Retourne -1 si aucune mesure valide
  */
-float getDistance(int trigPin, int echoPin)
+float getDistance(int sensorPin)
 {
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(5);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
+  float volts = analogRead(sensorPin) * 0.0008056640625; // value from sensor * (3.3/4096)
+  float sensorValue = 29.988 * pow( volts, -1.173);
 
-
-  long duration = pulseIn(echoPin, HIGH); // timeout 30 ms
-  //float distance = duration * 0.0343 / 2;
-  float distance = duration /29 / 2;
-
-  if (duration == 0) return -1;
-
-  //-- Arrondi au 1/2 cm près
-  distance = round(distance * 2.0) / 2.0;
-
-  return distance;
+  return sensorValue;
 }
 
 /**
@@ -219,7 +190,7 @@ float getDistance(int trigPin, int echoPin)
 String getrfidSensorValue()
 {
   // Envoi de la commande "Q\r\n" au lecteur
-    Serial1.print("Q\r\n");
+  Serial1.print("Q\r\n");
     
   // Attente de la réponse du lecteur RFID
   String rfidData = "";
@@ -234,15 +205,15 @@ String getrfidSensorValue()
   }
 
   // Affichage de la réponsedu lecteur RFID
-  if (rfidData.length() > 0)
-  {
-    Serial.print("Réponse du lecteur : ");
-    Serial.println(rfidData);
-  }
-  else
-  {
-    //Serial.println("Aucune donnée reçue ou timeout.");
-  }
+  // if (rfidData.length() > 0)
+  // {
+  //   Serial.print("Réponse du lecteur : ");
+  //   Serial.println(rfidData);
+  // }
+  // else
+  // {
+  //   //Serial.println("Aucune donnée reçue ou timeout.");
+  // }
   
   return rfidData;
 }
