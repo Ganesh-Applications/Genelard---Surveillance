@@ -3,27 +3,42 @@ import Leds from "./leds.js";
 
 export default class Patrols
 {
-        constructor(leds)
+        constructor(gameManager)
         {
-                this.leds = leds;
+                this.gameManager = gameManager;
                 this.patrolPos = 0;
                 this.patrolSize = 4;
                 this.patrolDirection = 1;
                 this.patrolMode = null;
                 this.patrolsHoldingBox = 0;
+                this.running = false;
                 
                 this.patrolsReachSpeed = this.patrolSpeed = 1;
-                
-                setInterval(
-                        this.updatePatrols.bind(this),
-                        40
-                );
                 
                 this.updatePatrolMode();
         }
         
+        start()
+        {
+                this.running = true;
+                
+                setTimeout(
+                        this.updatePatrols.bind(this),
+                        40
+                );
+        }
+        
+        stop()
+        {
+                this.running = false;
+        }
+        
         updatePatrols()
         {
+                if (!this.running)
+                        return;
+                
+                console.log('updatePatroels');
                 // inertie sur la vitesse de déplacement des patrouilles
                 let speedInertia = PATROL_MODES[this.patrolMode].inertia;
                 
@@ -31,7 +46,6 @@ export default class Patrols
                 
                 //-- déplace la patrouille en fonction de sa direction et de sa vitesse
                 this.patrolPos += this.patrolDirection * this.patrolSpeed;
-                
                 
                 let leftBound = 0;
                 let rightBound = NUM_LEDS;
@@ -78,7 +92,12 @@ export default class Patrols
                         mode: this.patrolMode
                 });*/
                 
-                this.leds.update(this.patrolPos);
+                this.gameManager.patrolsUpdated(this.patrolPos);
+                
+                setTimeout(
+                        this.updatePatrols.bind(this),
+                        40
+                );
         }
         
         updatePatrolMode()
@@ -89,6 +108,7 @@ export default class Patrols
                 /*do
                 {
                         newMode = this.getRandomPatrolMode();
+                        console.log(newMode);
                 }
                 while (newMode == this.patrolMode && ++incr < 100);*/
                 
@@ -108,8 +128,8 @@ export default class Patrols
                 
                 console.log('new mode ', this.patrolMode);
                 
-                // let newDelay = this.getNextPatrolModeUpdateDelay();
-                // setTimeout(this.updatePatrolMode.bind(this), newDelay);
+                let newDelay = this.getNextPatrolModeUpdateDelay();
+                setTimeout(this.updatePatrolMode.bind(this), newDelay);
         }
         
         getRandomPatrolMode()

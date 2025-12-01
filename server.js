@@ -25,19 +25,26 @@ io.sockets.on('connection', function(socket)
 {
         socket.emit('hello');
         
+        //-- @todo à enlever après !!!!!!!!!!!!
+        gameManager.startGame();
+        
         socket.on('start_game', function(name)
         {
                 console.log('start game');
+                gameManager.startGame();
         });
         
         socket.on('stop_game', function(name)
         {
                 console.log('stop game');
+                gameManager.stopGame();
         });
 
         socket.on('hand_in_box', function(index, isInside)
         {
                 console.log('Une main', isInside ? 'entre dans la boîte' : 'sort de la boîte', index);
+                
+                gameManager.setHandInBox(index, isInside);
         });
 
         socket.on('object_in_box', function(index, isInside)

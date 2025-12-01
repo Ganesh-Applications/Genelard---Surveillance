@@ -7,7 +7,7 @@ var socket;
 const MISSION_START_TIME = 30;
 
 const NUM_BOXES = 4; // tmp
-const NUM_LEDS_PER_BOX = 16; // tmp
+const NUM_LEDS_PER_BOX = 10; // tmp
 const NUM_LEDS = NUM_BOXES * NUM_LEDS_PER_BOX;
 var leds = []; // tmp
 
@@ -22,6 +22,7 @@ function setupIO()
         socket.on('new_mission', onSocketNewMission);
         socket.on('mission_complete', onSocketMissionComplete);
         socket.on('mission_failed', onSocketMissionFailed);
+        socket.on('alert', onSocketAlert);
 
         socket.on('update_patrols', onSocketUpdatePatrols); // tmp
 }
@@ -158,50 +159,34 @@ function onSocketMissionComplete()
 function onSocketMissionFailed()
 {
         console.log('Mission failed');
+        
+        $('body').attr('data-alert-level', 0);
+        
+        // gotoPage('end');
+        
+        $('#game').addClass('ended');
+}
+
+function onSocketAlert(alertLevel)
+{
+        console.log('onsocketalert', alertLevel);
+        $('body').attr('data-alert-level', alertLevel);
 }
 
 // tmp
 function onSocketUpdatePatrols(patrols)
 {
-        console.log(patrols);
+        // console.log(patrols);
 
         leds.removeClass('patrol-over');
         leds.removeClass('patrol-over-active');
 
-        let patrolsPositions = [];
-
-        /*if (patrols.mode == 'alert')
+        for (let i in patrols)
         {
-                for (let i = 0; i < patrols.size; i++)
-                {
-                        let randomPos;
-                        let incr = 0;
-
-                        do
-                        {
-                                randomPos = Math.floor(Math.random() * NUM_LEDS);
-                        }
-                        while (patrolsPositions.includes(randomPos) && ++incr < 100);
-
-                        patrolsPositions.push(randomPos);
-                }
-                console.log(patrolsPositions);
+                let color = patrols[i];
+                color = toCssHex(color);
+                leds.eq(i).css('background', color);
         }
-        else
-        {*/
-                for (let i = patrols.pos ; i < patrols.pos + patrols.size; i++)
-                        patrolsPositions.push(i);
-
-                // let currentBox = Math.floor(patrols.pos / NUM_LEDS_PER_BOX);
-                // leds.slice(currentBox * NUM_LEDS_PER_BOX, currentBox * NUM_LEDS_PER_BOX + NUM_LEDS_PER_BOX).addClass('patrol-over');
-                // console.log(currentBox);
-        //}
-
-        leds.each(function(i)
-        {
-                if (patrolsPositions.includes(i))
-                        $(this).addClass('patrol-over-active');
-        });
 }
 
 function clickHandSimulator()
@@ -218,4 +203,17 @@ function clickObjectSimulator()
         $(this).toggleClass('inside');
         let isInside = $(this).hasClass('inside');
         socket.emit('object_in_box', index, isInside);
+}
+
+/*
+ * Pour le simulateur de leds
+ */
+function toCssHex(color) {
+        let r = (color >>> 24) & 0xFF;
+        let g = (color >>> 16) & 0xFF;
+        let b = (color >>> 8)  & 0xFF;
+        
+        return `#${r.toString(16).padStart(2, '0')}`
+                + `${g.toString(16).padStart(2, '0')}`
+                + `${b.toString(16).padStart(2, '0')}`;
 }

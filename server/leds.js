@@ -15,6 +15,11 @@ export default class Leds extends ESPHandler
                 this.ledValues = new Array(NUM_LEDS).fill(0);
                 this.redFactors = new Array(NUM_LEDS).fill(0);
         }
+        
+        setIO(io)
+        {
+                this.io = io;
+        }
 
         setBoxes(boxes)
         {
@@ -37,7 +42,7 @@ export default class Leds extends ESPHandler
                                 for (let i = box * NUM_LEDS_PER_BOX; i < box * NUM_LEDS_PER_BOX + NUM_LEDS_PER_BOX; i++)
                                         this.ledValues[i] = this.getColor(255, 255 - this.redFactors[i], 0, this.flashValue);
 
-
+                //-- définit les valeurs des leds
                 const patrolIndices = [patrolsPos - 1, patrolsPos, patrolsPos + 1];
                 for (let i of patrolIndices)
                         if (i >= 0 && i < this.ledValues.length)
@@ -45,15 +50,16 @@ export default class Leds extends ESPHandler
                                 this.redFactors[i] = 255; // <- pour le fade avec le jaune
                                 this.ledValues[i] = this.getColor(255, 0, 0);
                         }
-
-
-
+                
+                //-- fade off des leds rouges
                 for (let i in this.ledValues)
                 {
                         this.redFactors[i] *= 0.7;
                 }
 
                 this.sendCommand('led', this.ledValues);
+                
+                this.io.emit('update_patrols', this.ledValues);
         }
         
         getColor(r, g, b, a = 255)

@@ -24,6 +24,8 @@ export default class Box extends ESPHandler
                 
                 this.objectInside = 'none';
                 
+                this.handInside = false;
+                
                 this.eventListener = null;
         }
         
