@@ -3,9 +3,11 @@ import { ReadlineParser } from "@serialport/parser-readline";
 
 export default class ESPHandler
 {
-        constructor(name, portPath, onSensorUpdate)
+        constructor(name, portPath, io)
         {
+                this.id = portPath;
                 this.name = name;
+                this.io = io;
                 
                 //-- Connexion série
                 this.port = new SerialPort(
@@ -19,11 +21,15 @@ export default class ESPHandler
                 this.port.on("open", () =>
                 {
                         console.log(`[${this.name}] Port ouvert : ${portPath}`);
+                        
+                        this.status = 'open';
                 });
                 
                 this.port.on("error", (err) =>
                 {
                         console.error(`[${this.name}] Erreur série:`, err.message);
+                        
+                        this.status = 'error';
                 });
                 
                 // -- Réception des données
@@ -31,6 +37,15 @@ export default class ESPHandler
                 {
                         this.handleData(data);
                 });
+                
+                setInterval(function()
+                {
+                    this.io.emit('esp_status', {
+                        id: this.id,
+                        status: this.status
+                    });
+                    
+                }.bind(this), 1000);
                 
                 this.init();
         }

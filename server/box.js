@@ -3,7 +3,8 @@ import ESPHandler from "./esp-handler.js";
 const HISTORY_LENGTH = 11;
 
 export default class Box extends ESPHandler
-{        init(name)
+{       
+        init()
         {
                 this.frontSensor = {
                         name: "front",
@@ -42,6 +43,11 @@ export default class Box extends ESPHandler
                 
                 if (this.eventListener != null)
                         this.eventListener.onBoxUpdate();
+                    
+                this.io.emit('box_update_data', {
+                    id: this.id,
+                    data: json
+                });
         }
         
         determineHandPresence(sensor, newValue)

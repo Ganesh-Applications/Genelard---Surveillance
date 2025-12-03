@@ -1,6 +1,6 @@
 import Box from "./box.js";
 import Mission from "./mission.js";
-import {STEPS, LED_COLORS, OBJECTS, BOXES, NUM_LEDS_PER_BOX, NUM_BOX} from './constants.js';
+import {STEPS, LED_COLORS, OBJECTS, BOXES, NUM_LEDS_PER_BOX, NUM_BOX, NUM_OBJECTS} from './constants.js';
 import Patrols from "./patrols.js";
 import Leds from "./leds.js";
 
@@ -15,15 +15,23 @@ export default class GameManager
                 for (let i in BOXES)
                         this.boxes.push(new Box(
                                 BOXES[i].name,
-                                BOXES[i].path
+                                BOXES[i].path,
+                                this.io
                         ));
+                        
+                //-- liste d'objets restants (on en enlève au fur et à mesure des missions)
+                this.remainingObjects = [];
+                for (let o in OBJECTS)
+                    this.remainingObjects.push(OBJECTS[o]);
 
                 //-- création du gestionnaire de leds
-                this.leds = new Leds("leds", "COM5");
-                this.leds.setIO(io);
+                this.leds = new Leds("leds", "dev/espLeds", this.io);
                 this.leds.setBoxes(this.boxes);
                 
                 this.started = false;
+
+                //-- pour ne pas tirer deux fois la même boîte d'affilée (en soi, exclut la boite 1 comme boîte de départ, mais c'est pas plus mal)
+                this.previousBoxIndex = 0;
 
                 //-- création des patrouilles
                 this.patrols = new Patrols(this);
@@ -38,84 +46,145 @@ export default class GameManager
                 this.patrols.start();
                 
                 this.currentMissions = [];
-                this.createNewMission(this.boxes[0], OBJECTS[0]);
+                
+                let gameManager = this;
+                
+                setTimeout(function()
+                {
+                    this.createNewMission();
+                }.bind(this), 3000);
+        }
+        
+        endOfGame(success)
+        {
+                console.log('END OF GAME !');
+            
+                this.stopGame();
+                this.io.emit('end_of_game', success);
         }
         
         stopGame()
         {
+                if (!this.started)
+                    return;
+            
                 this.started = false;
-                console.log("STOPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+                
                 this.patrols.stop();
+                
+                this.currentMissions = [];
         }
         
-        createNewMission(box, object)
+        createNewMission()
         {
+                let box = this.getRandomBox();
+                
+                let objectIndex = Math.floor(Math.random() * this.remainingObjects.length);
+                let object = this.remainingObjects[objectIndex];
+                
+                console.log('new mission, box=', box.name, ', object=', objectIndex);
+                console.log(object.name);
+                
                 const mission = new Mission(box, object);
                 mission.eventListener = this;
                 
                 this.currentMissions.push(mission);
+                
+                //-- enlève l'objet du tableau des objets restants
+                this.remainingObjects.splice(objectIndex, 1);
+                
+                this.io.emit('new_mission', mission.clientData);
+                
+                setTimeout(function()
+                {
+                    this.onMissionComplete(mission);
+                    
+                }.bind(this), 3000);
+        }
+        
+        getRandomBox()
+        {
+                let inc = 0;
+                let boxIndex = this.previousBoxIndex;
+                
+                do
+                {
+                    boxIndex = Math.floor(Math.random() * NUM_BOX);
+                }
+                while (boxIndex == this.previousBoxIndex && inc++ < 100);
+                
+                let box = this.boxes[boxIndex];
+                return box;
         }
         
         onChangeStep(mission)
         {
                 console.log(`Mission step changed: ${mission.step}`);
                 
-                if (mission.step === STEPS.UNSTARTED)
-                        mission.box.setLed(LED_COLORS.OFF);
-                else if (mission.step === STEPS.GIVE_SIDE_INSIDE)
-                        mission.box.setLed(LED_COLORS.YELLOW);
-                else if (mission.step === STEPS.OBJECT_DROPPED)
-                        mission.box.setLed(LED_COLORS.LIGHT_BLUE);
-                else if (mission.step === STEPS.TAKE_SIDE_INSIDE)
-                        mission.box.setLed(LED_COLORS.BLUE);
-                else if (mission.step === STEPS.COMPLETED)
+                if (mission.step === STEPS.COMPLETED)
                 {
-                        mission.box.setLed(LED_COLORS.GREEN);
-                        mission.destroy();
-                        setTimeout(() =>
-                        {
-                                mission.box.setLed(LED_COLORS.OFF);
-                                this.createNewMission();
-                        }, 3000); // Attendre 5 secondes avant de créer une nouvelle mission
+                        // mission.destroy();
+                        
+                        // setTimeout(() =>
+                        // {
+                                // this.createNewMission();
+                        // }, 3000); // Attendre 5 secondes avant de créer une nouvelle mission
                 }
                 else if (mission.step === STEPS.FAILED)
                 {
-                        mission.box.setLed(LED_COLORS.RED);
+                    
                 }
                 else if (mission.step === STEPS.FAILED_OBJECT_STILL_INSIDE)
                 {
-                        mission.box.setLed(LED_COLORS.PURPLE);
+                    
                 }
         }
         
+        /**
+         * Evenement diffusé par le client via server.js
+         * = mission expirée
+         */
         onMissionFailed(mission, reason)
         {
-                console.log(`Mission failed: ${reason}`, new Date().getTime());
-                //mission.destroy();
+                console.log('Mission failed', reason, mission.clientData);
                 
-                //var gameManager = this;
-                
-                /*setTimeout(function()
-                {
-                        mission.box.setLed(LED_COLORS.OFF);
-
-                        gameManager.createNewMission();
-                }, 3000);*/
+                this.endMission(mission, false);
         }
         
-        onMissionEnd(mission)
+        onMissionComplete(mission)
+        {
+                console.log(`Mission complete`);
+                
+                this.io.emit('mission_complete', mission.clientData);
+                
+                this.endMission(mission, true);
+        }
+        
+        endMission(mission, success)
         {
                 console.log(`Mission ended`);
                 
-                let gameManager = this;
+                if (this.remainingObjects.length == 0)
+                {
+                        this.endOfGame(success);
+                        return;
+                }
                 
                 setTimeout(function()
-                {
-                        mission.box.setLed(LED_COLORS.OFF);
-                        
-                        gameManager.createNewMission();
-                }, 3000);
+                {                        
+                        this.createNewMission();
+                }.bind(this), 3000);
         }
+        // onMissionExpired(mission)
+        // {
+                
+                // let gameManager = this;
+                
+                // setTimeout(function()
+                // {
+                        // gameManager.createNewMission();
+                // }, 2000);
+        // }
         
         setHandInBox(index, isInside)
         {
@@ -147,13 +216,13 @@ export default class GameManager
                 
                 if (frontInside || backInside)
                 {
-                        console.log("ALERT ON BOX " + (currentBox+1), "alertLevel=", Math.floor(this.alertLevel/20));
+                        console.log("ALERT ON BOX " + (currentBox+1), "alertLevel=", this.alertLevel);
                         
-                        if (this.alertLevel < 300)
+                        if (this.alertLevel < 50)
                         {
                                 this.alertLevel++;
-                                console.log('alertLevel level ', this.alertLevel);
-                                this.io.emit('alert', Math.floor(this.alertLevel/100));
+                                
+                                this.io.emit('alert');
                         }
                         else
                         {

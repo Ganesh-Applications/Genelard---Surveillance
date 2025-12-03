@@ -9,13 +9,11 @@ export default class Patrols
                 this.patrolPos = 0;
                 this.patrolSize = 4;
                 this.patrolDirection = 1;
-                this.patrolMode = null;
+                this.patrolMode = PATROLLING;
                 this.patrolsHoldingBox = 0;
                 this.running = false;
                 
                 this.patrolsReachSpeed = this.patrolSpeed = 1;
-                
-                this.updatePatrolMode();
         }
         
         start()
@@ -38,7 +36,8 @@ export default class Patrols
                 if (!this.running)
                         return;
                 
-                console.log('updatePatroels');
+                // console.log('updatePatrols');
+                
                 // inertie sur la vitesse de déplacement des patrouilles
                 let speedInertia = PATROL_MODES[this.patrolMode].inertia;
                 

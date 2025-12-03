@@ -16,11 +16,6 @@ export default class Leds extends ESPHandler
                 this.redFactors = new Array(NUM_LEDS).fill(0);
         }
         
-        setIO(io)
-        {
-                this.io = io;
-        }
-
         setBoxes(boxes)
         {
                 this.boxes = boxes;

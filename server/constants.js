@@ -80,12 +80,43 @@ export const OBJECTS = [
         },
         {
                 id:'C:3C:70:6',
-                name: "la boîte d'oeufs",
+                name: "le journal",
+                key: 'journal'
+        },
+        {
+                id:'C:3C:70:6',
+                name: "le panier d'oeufs",
                 key: 'oeufs'
         },
         {
                 id:'C:3C:70:6',
                 name: "la paire de chaussures",
                 key: 'chaussures'
+        },
+        {
+                id:'C:3C:70:6',
+                name: "la radio",
+                key: 'radio'
+        },
+        {
+                id:'C:3C:70:6',
+                name: "la miche de pain",
+                key: 'pain'
+        },
+        {
+                id:'C:3C:70:6',
+                name: "la lettre",
+                key: 'lettre'
+        },
+        {
+                id:'C:3C:70:6',
+                name: "l'argent",
+                key: 'argent'
+        },
+        {
+                id:'C:3C:70:6',
+                name: 'le livre',
+                key: 'livre'
         }
 ]
+export const NUM_OBJECTS = OBJECTS.length;

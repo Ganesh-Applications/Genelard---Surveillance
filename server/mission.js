@@ -4,23 +4,26 @@ export default class Mission
 {
         constructor(box, object)
         {
+                this.id = new Date().getTime();
                 this.box = box;
                 this.object = object;
                 this.step = STEPS.UNSTARTED;
                 
                 //-- Objet pour passer les infos de la mission au client
                 this.clientData = {
+                        id: this.id,
                         boxName: this.box.name,
                         object: this.object
                 };
                 
                 //-- On s'abonne aux événements de la boîte
-                this.box.eventListener = this;
+                this.box.gameManager = this;
                 
                 //-- Écouteur d'événements de la mission
-                this.eventListener = null;
+                this.gameManager = null;
         }
         
+        //@todo voir si on laisse ce mode dans mission ou non... pas forcément pertinent
         onBoxUpdate()
         {
                 let giveSideInside = this.box.frontSensor.inside;
@@ -108,7 +111,9 @@ export default class Mission
                 {
                         if (boxObject === "none")
                         {
-                                this.missionEnd();
+                                // end mission ? à voir ce qu'on fait exactement...
+                            
+                                // this.endMission();
                         }
                 }
         }
@@ -120,34 +125,21 @@ export default class Mission
                 if (boxObject !== 'none')
                 {
                         this.changeStep(STEPS.FAILED_OBJECT_STILL_INSIDE);
-                        this.eventListener.onMissionFailed(this, reason);
+                        this.gameManager.onMissionFailed(this, reason);
                 }
                 else
                 {
                         
                         this.changeStep(STEPS.FAILED);
-                        this.eventListener.onMissionFailed(this, reason);
-                        this.missionEnd();
+                        this.gameManager.onMissionFailed(this, reason);
                 }
                 
-        }
-        
-        missionEnd()
-        {
-                this.eventListener.onMissionEnd(this);
-                this.destroy();
         }
         
         changeStep(newStep)
         {
                 this.step = newStep;
                 
-                this.eventListener.onChangeStep(this);
-        }
-        
-        destroy()
-        {
-                this.box.eventListener = null;
-                this.eventListener = null;
+                this.gameManager.onChangeStep(this);
         }
 }

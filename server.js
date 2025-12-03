@@ -16,6 +16,10 @@ app.get('/', (req, res) =>
 {
         res.sendFile(path.resolve('index.html'));
 });
+app.get('/monitoring', (req, res) =>
+{
+        res.sendFile(path.resolve('monitoring.html'));
+});
 
 // Traitement des fichiers statiques
 app.use(express.static(path.resolve('./')));
@@ -25,8 +29,8 @@ io.sockets.on('connection', function(socket)
 {
         socket.emit('hello');
         
-        //-- @todo à enlever après !!!!!!!!!!!!
-        gameManager.startGame();
+        //-- @todo temporaire pour lancer le jeu immédiatement si besoin
+        // gameManager.startGame();
         
         socket.on('start_game', function(name)
         {
@@ -36,8 +40,14 @@ io.sockets.on('connection', function(socket)
         
         socket.on('stop_game', function(name)
         {
-                console.log('stop game');
+                console.log('stop game?');
                 gameManager.stopGame();
+        });
+        
+        socket.on('mission_expired', function(iMission)
+        {
+                console.log('missionExpired');
+                gameManager.onMissionFailed(iMission, 'expired');
         });
 
         socket.on('hand_in_box', function(index, isInside)
@@ -52,15 +62,6 @@ io.sockets.on('connection', function(socket)
                 console.log('Un objet', isInside ? 'entre dans la boîte' : 'sort de la boîte', index);
                 gameManager.boxes[index].objectInside = isInside ? true : 'none';
         });
-        /*let iMission = 0;
-        let sendMissionInterval = setInterval(function()
-        {
-                socket.emit('new_mission', gameManager.currentMissions[iMission].clientData);
-                iMission++;
-
-                if (iMission == 4)
-                        clearInterval(sendMissionInterval);
-        }, 2000);*/
 });
 
 server.listen(3000, () => {
