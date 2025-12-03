@@ -13,10 +13,13 @@ function onEspStatus(data)
 {
     let esp = $('.esp[data-id="' + data.id + '"]');
     esp.find('.esp-status').attr('data-status', data.status);
+    
 }
 
 function onBoxUpdateData(data)
 {
+    console.log('onBoxUpdateData', data);
+    
     let esp = $('.esp[data-id="' + data.id + '"]');
     let boxData = data.data;
     

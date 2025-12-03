@@ -25,7 +25,7 @@ export default class GameManager
                     this.remainingObjects.push(OBJECTS[o]);
 
                 //-- création du gestionnaire de leds
-                this.leds = new Leds("leds", "dev/espLeds", this.io);
+                this.leds = new Leds("leds", "/dev/espLeds", this.io);
                 this.leds.setBoxes(this.boxes);
                 
                 this.started = false;
