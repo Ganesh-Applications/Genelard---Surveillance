@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <title>Jeu de surveillance - Monitoring</title>
+        <link rel="stylesheet" href="client/reset.css">
+        <link rel="stylesheet" href="client/fonts.css">
+        <link rel="stylesheet" href="client/styles.css">
+        <link rel="stylesheet" href="client/monitoring.css">
+        <script type="application/javascript" src="lib/jquery-3.7.1.min.js"></script>
+        <script type="application/javascript" src="lib/socket.io.min.js"></script>
+        <script type="application/javascript" src="client/monitoring.js" defer></script>
+</head>
+<body>
+    
+    <div id="main">
+    
+            <div class="title">
+                Monitoring jeu de surveillance
+            </div>
+    
+            <div class="esps">
+                <div class="esp" data-id="dev/esp1">
+                    <div class="esp-name">
+                        Box 1
+                    </div>
+                    <div class="esp-status">
+                        
+                    </div>
+                    
+                    <div class="sensors">
+                            <div class="sensor front">
+                                    <div class="sensor-name">Front</div>
+                                    <input class="sensor-value" readonly />
+                            </div>
+                            <div class="sensor back">
+                                    <div class="sensor-name">Back</div>
+                                    <input class="sensor-value" readonly />
+                            </div>
+                            <div class="sensor rfid">
+                                    <div class="sensor-name">RFID</div>
+                                    <input class="sensor-value" readonly />
+                            </div>
+                    </div>
+                </div>
+                
+                <div class="esp" data-id="dev/esp2">
+                    <div class="esp-name">
+                        Box 2
+                    </div>
+                    <div class="esp-status">
+                        
+                    </div>
+                    
+                    <div class="sensors">
+                            <div class="sensor front">
+                                    <div class="sensor-name">Front</div>
+                                    <input class="sensor-value" readonly />
+                            </div>
+                            <div class="sensor back">
+                                    <div class="sensor-name">Back</div>
+                                    <input class="sensor-value" readonly />
+                            </div>
+                            <div class="sensor rfid">
+                                    <div class="sensor-name">RFID</div>
+                                    <input class="sensor-value" readonly />
+                            </div>
+                    </div>
+                </div>
+                
+                <div class="esp" data-id="dev/esp3">
+                    <div class="esp-name">
+                        Box 3
+                    </div>
+                    <div class="esp-status">
+                        
+                    </div>
+                    
+                    <div class="sensors">
+                            <div class="sensor front">
+                                    <div class="sensor-name">Front</div>
+                                    <input class="sensor-value" readonly />
+                            </div>
+                            <div class="sensor back">
+                                    <div class="sensor-name">Back</div>
+                                    <input class="sensor-value" readonly />
+                            </div>
+                            <div class="sensor rfid">
+                                    <div class="sensor-name">RFID</div>
+                                    <input class="sensor-value" readonly />
+                            </div>
+                    </div>
+                </div>
+                
+                <div class="esp" data-id="dev/esp4">
+                    <div class="esp-name">
+                        Box 4
+                    </div>
+                    <div class="esp-status">
+                        
+                    </div>
+                    
+                    <div class="sensors">
+                            <div class="sensor front">
+                                    <div class="sensor-name">Front</div>
+                                    <input class="sensor-value" readonly />
+                            </div>
+                            <div class="sensor back">
+                                    <div class="sensor-name">Back</div>
+                                    <input class="sensor-value" readonly />
+                            </div>
+                            <div class="sensor rfid">
+                                    <div class="sensor-name">RFID</div>
+                                    <input class="sensor-value" readonly />
+                            </div>
+                    </div>
+                </div>
+            </div>
+            
+                
+            <div class="esp leds" data-id="dev/espLeds">
+                <div class="esp-name">
+                    LEDs
+                </div>
+                <div class="esp-status">
+                    
+                </div>
+            </div>
+    </div>
+    
+</body>
+
+</html>

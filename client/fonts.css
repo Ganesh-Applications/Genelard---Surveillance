@@ -1,0 +1,30 @@
+/* Fonts */
+@font-face {
+        font-family: 'Anisette';
+        src: url('fonts/AnisetteStd-Regular.otf') format('opentype');
+        font-weight: normal;
+        font-style: normal;
+}
+@font-face {
+        font-family: 'Anisette';
+        src: url('fonts/AnisetteStd-Bold.otf') format('opentype');
+        font-weight: bold;
+        font-style: normal;
+}
+
+@font-face {
+        font-family: "Parisine";
+        src: url("fonts/ParisineOfficeStd-Regular.otf") format("opentype");
+        font-weight: normal;
+        font-style: normal;
+}
+@font-face {
+        font-family: "Parisine";
+        src: url("fonts/ParisineOfficeStd-Bold.otf") format("opentype");
+        font-weight: bold;
+        font-style: normal;
+}
+
+body {
+        /*transform:scale(50%);*/
+}

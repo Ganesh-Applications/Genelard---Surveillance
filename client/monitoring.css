@@ -1,0 +1,71 @@
+#main {
+    display:flex;
+    flex-direction:column;
+    gap:50px;
+    align-items:center;
+    justify-content:center;
+    background-image:none;
+    color:#fff;
+}
+#main > .title {
+    font-size:30px;
+}
+.esps {
+    display:flex;
+}
+.esp {
+    text-align:center;
+}
+.esp:not(:last-child) {
+    border-right:solid 1px #9ecacd;
+    padding-right:40px;
+    margin-right:40px;
+}
+.esp.leds {
+    border-top:solid 1px #9ecacd;
+    padding-top:40px;
+    width:90%;
+}
+.esp-name {
+    font-weight:bold;
+    font-size:22px;
+}
+.esp-status {
+    width:30px;
+    height:30px;
+    margin:10px auto;
+    border-radius:50%;
+    background:#9ecacd;
+    border:solid 2px #1d5459;
+}
+.esp-status[data-status="open"] {
+    background:#54cd86;
+}
+.esp-status[data-status="error"] {
+    background:#CC533E;
+}
+.sensors {
+    margin-top:30px;
+}
+.sensor {
+    margin-bottom:10px;
+}
+.sensor-name {
+    margin-bottom:5px;
+    text-transform:uppercase;
+    font-size:13px;
+    font-weight:bold;
+}
+.sensor-value {
+    width: 120px;
+    padding:5px;
+    border-radius:5px;
+    background:#9ecacd;
+    margin-bottom:5px;
+    text-align:right;
+    border:solid 2px #1d5459;
+    font-size: 17px;
+}
+.rfid .sensor-value {
+    width: 215px;
+}
