@@ -10,16 +10,16 @@ export default class Box extends ESPHandler
                         name: "front",
                         currentValue: 0,
                         history: [],
-                        idleMin: 13,
-                        idleMax: 23,
+                        idleMin: 90,
+                        idleMax: 200,
                         inside: false
                 }
                 this.backSensor = {
                         name: "back",
                         currentValue: 0,
                         history: [],
-                        idleMin: 13,
-                        idleMax: 23,
+                        idleMin: 90,
+                        idleMax: 200,
                         inside: false
                 }
                 
@@ -32,13 +32,15 @@ export default class Box extends ESPHandler
         
         updateData(json)
         {
+            console.log('updateData', json);
+            
                 // if (json.front_sensor_value !== this.frontSensor.currentValue)
                 this.determineHandPresence(this.frontSensor, json.front_sensor_value);
                 
                 // if (json.back_sensor_value !== this.backSensor.currentValue)
                 this.determineHandPresence(this.backSensor, json.back_sensor_value);
                 
-                if (json.rfid_sensor_value !== this.objectInside)
+                if (json.rfid_sensor_value !== this.objectInside && json.rfid_sensor_value != 'Q')
                         this.updateRfid(json.rfid_sensor_value);
                 
                 if (this.eventListener != null)
@@ -69,6 +71,12 @@ export default class Box extends ESPHandler
                 
                 //-- Si plus de deux valeurs enregistrées sont en dehors de la plage idle, on considère qu’une main est présente
                 let inside = numUnderMin > 2 || numOverMax > 2;
+                
+                if (inside)
+                {
+                    numUnderMin = 0;
+                    numOverMax = 0;
+                }
                 
                 //if (inside != sensor.inside)
                 //console.log("Sensor ", sensor.name, sensor.history, "Num under min:", numUnderMin, "Num over max:", numOverMax, "Inside:", inside);

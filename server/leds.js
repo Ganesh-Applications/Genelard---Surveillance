@@ -86,7 +86,7 @@ export default class Leds extends ESPHandler
                 //-- fade off des leds rouges
                 for (let i in this.ledValues)
                 {
-                        this.ledValues[i] = this.getColor(255, 0, 0);
+                        this.ledValues[i] = this.getColor(255, 0, 0).toString(16).toUpperCase().padStart(8, '0');
                 }
             
                 this.sendCommand('led', this.ledValues);

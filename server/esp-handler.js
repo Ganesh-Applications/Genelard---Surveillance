@@ -88,6 +88,6 @@ export default class ESPHandler
                         if (err)
                                 return console.error(`[${this.name}] Erreur écriture:`, err.message);
                 });
-                //console.log(`[${this.name}] →`, msg);
+                console.log(`[${this.name}] →`, msg);
         }
 }

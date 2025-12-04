@@ -16,10 +16,13 @@ RGBA ledValues[NUM_LEDS];
 CRGB leds[NUM_LEDS];
 
 String inputString = "";
+bool messageReady = false;
 
 void setup()
 {
+    Serial.setRxBufferSize(1024); // par exemple 1 Ko
     Serial.begin(115200);
+    //Serial.setTimeout(5000);
 
     FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS);
     FastLED.setBrightness(BRIGHTNESS);
@@ -27,7 +30,7 @@ void setup()
 
 void loop()
 {
-    if (Serial.available())
+    /*if (Serial.available())
     {
         // Lit la ligne JSON complète
         String jsonString = Serial.readStringUntil('\n');
@@ -36,9 +39,30 @@ void loop()
             return;
 
         execCommand(jsonString);
+    }*/
+
+    /*if (Serial.available()) {
+        String jsonString = Serial.readStringUntil('#');
+        Serial.println(jsonString);
+    }*/
+
+    //-- Lire les commandes reçues caractère par caractère
+    while (Serial.available())
+    {
+      char c = Serial.read();
+      if (c == '\n')  
+      {  
+        //Serial.println(inputString);
+        execCommand(inputString);
+        inputString = "";
+      } 
+      else 
+      {
+        inputString += c;
+      }
     }
 
-    //delay(100);
+    delay(50);
 }
 
 /**
@@ -71,8 +95,6 @@ void execCommand(String jsonString)
 
 void updateLEDs(JsonDocument doc)
 {
-    //Serial.println("updateLEDs");
-
     //fill_solid(leds, NUM_LEDS, CRGB::Black);
 
     for (int i = 0; i < NUM_LEDS; i++)
