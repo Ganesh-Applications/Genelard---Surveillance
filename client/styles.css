@@ -252,7 +252,10 @@ body {
         height:104px;
         background:#3D898F;
         opacity:0;
-        transition:1.5s;
+        transition:background 1.5s, opacity .5s;
+}
+#game .missions .mission .mission-image img {
+        width:75%;
 }
 #game .missions .mission.visible .mission-image {
         opacity:1;
@@ -327,7 +330,9 @@ body {
         background:#54cd86;
 }
 #game .missions .mission[data-time-status="expired"] .mission-bar .mission-time,
-#game .missions .mission[data-time-status="success"] .mission-bar .mission-time {
+#game .missions .mission[data-time-status="success"] .mission-bar .mission-time,
+#game .missions .mission.archived .mission-bar .mission-time,
+#game .missions .mission.success .mission-bar .mission-time {
         width:auto;
 }
 @keyframes alert-low-bg {

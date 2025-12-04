@@ -82,7 +82,7 @@ export default class GameManager
                 let objectIndex = Math.floor(Math.random() * this.remainingObjects.length);
                 let object = this.remainingObjects[objectIndex];
                 
-                console.log('new mission, box=', box.name, ', object=', objectIndex);
+                console.log('new mission, box=', box.name, ', object=', objectIndex, ' / ', this.remainingObjects.length);
                 console.log(object.name);
                 
                 const mission = new Mission(box, object);
@@ -95,11 +95,12 @@ export default class GameManager
                 
                 this.io.emit('new_mission', mission.clientData);
                 
-                setTimeout(function()
-                {
-                    this.onMissionComplete(mission);
+                //-- pour simuler une mission réussie
+                // setTimeout(function()
+                // {
+                    // this.onMissionComplete(mission);
                     
-                }.bind(this), 3000);
+                // }.bind(this), 3000);
         }
         
         getRandomBox()
@@ -231,5 +232,10 @@ export default class GameManager
                                 this.stopGame();
                         }
                 }
+        }
+        
+        testActivateLeds()
+        {
+            this.leds.testActivateLeds();
         }
 }

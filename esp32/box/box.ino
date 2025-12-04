@@ -11,7 +11,7 @@
 #define IR_SENSOR_BACK 1 // Sharp IR GP2Y0A41SK0F Sensor
 
 //-- Temps entre vérifications capteurs (en ms)
-#define STATUS_DELAY 100  
+#define STATUS_DELAY 50  
 
 #define RFID_POWER 10
 //#define RFID_POWER 1 // pour le grand
@@ -20,7 +20,7 @@ String inputString = "";
 unsigned long lastStatus = 0;
 unsigned int currentDistanceSensor = 0;
 
-//-- Variables capteurs (m�moire des derni�res valeurs envoy�es)
+//-- Variables capteurs (mémoire des dernières valeurs envoyées)
 float frontSensorValue = -1;
 float backSensorValue  = -1;
 String rfidSensorValue     = "none";
@@ -133,6 +133,7 @@ void updateSensorsStatus()
   //-- Mesures actuelles
   String newrfidSensorValue = getrfidSensorValue();
   float newFrontSensorValue = getDistance(IR_SENSOR_FRONT);
+  delay(50);
   float newBackSensorValue = getDistance(IR_SENSOR_BACK);
 
 
@@ -150,20 +151,24 @@ void updateSensorsStatus()
   {
     newBackSensorValue  = getDistance(TRIG_BACK, ECHO_BACK);    
     currentDistanceSensor = 0;
-  }
+  }*/
+
+  float alpha = 0.1f;
 
   //-- Comparer avec anciennes valeurs
   if (newFrontSensorValue != frontSensorValue)
   {
     frontSensorValue = newFrontSensorValue;
+    //frontSensorValue += (newFrontSensorValue - frontSensorValue) * alpha;
     valuesHaveChanged = true;
   }
 
   if (newBackSensorValue != backSensorValue)
   {
     backSensorValue = newBackSensorValue;
+    //backSensorValue += (newBackSensorValue - backSensorValue) * alpha;
     valuesHaveChanged = true;
-  }*/
+  }
 
   if (newrfidSensorValue != rfidSensorValue)
   {
@@ -173,19 +178,25 @@ void updateSensorsStatus()
 }
 
 /**
- * Retourne la distance mesur�e par un GP2Y0A41SK0F (cm)
+ * Retourne la distance mesurée par un GP2Y0A41SK0F (cm)
  * Retourne -1 si aucune mesure valide
  */
 float getDistance(int sensorPin)
 {
+  //float volts = analogRead(sensorPin) * 0.0008056640625; // value from sensor * (3.3/4096)
+  //float sensorValue = 29.988 * pow( volts, -1.173);
+
+  //float volts = analogRead(sensorPin)*0.0048828125;  // value from sensor * (5/1024)
+  //float sensorValue = 13*pow(volts, -1); // worked out from datasheet graph
+
   float volts = analogRead(sensorPin) * 0.0008056640625; // value from sensor * (3.3/4096)
-  float sensorValue = 29.988 * pow( volts, -1.173);
+  int sensorValue = 29.988 * pow( volts, -1.173);
 
   return sensorValue;
 }
 
 /**
- * Retourne l�UID de la carte RFID si pr�sente, sinon "none"
+ * Retourne l'UID de la carte RFID si présente, sinon "none"
  */
 String getrfidSensorValue()
 {

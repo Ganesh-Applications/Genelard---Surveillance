@@ -62,6 +62,13 @@ io.sockets.on('connection', function(socket)
                 console.log('Un objet', isInside ? 'entre dans la boîte' : 'sort de la boîte', index);
                 gameManager.boxes[index].objectInside = isInside ? true : 'none';
         });
+
+        socket.on('activate_leds', function()
+        {
+            
+            console.log('socket receive activate_leds');
+                gameManager.testActivateLeds();
+        });
 });
 
 server.listen(3000, () => {

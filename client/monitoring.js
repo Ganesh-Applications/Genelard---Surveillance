@@ -1,5 +1,7 @@
 var socket;
 
+$('.btn-activate-leds').click(clickActivateLeds);
+
 setupIO();
 
 function setupIO()
@@ -34,4 +36,10 @@ function onBoxUpdateData(data)
     esp.find('.sensor.rfid .sensor-value').val(
         boxData.rfid_sensor_value
     );
+}
+
+function clickActivateLeds()
+{
+    console.log('testActivateLeds');
+    socket.emit('activate_leds');
 }

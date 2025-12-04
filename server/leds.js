@@ -79,4 +79,16 @@ export default class Leds extends ESPHandler
                 });
         }
         
+        testActivateLeds()
+        {
+                console.log('testActivateLeds');
+            
+                //-- fade off des leds rouges
+                for (let i in this.ledValues)
+                {
+                        this.ledValues[i] = this.getColor(255, 0, 0);
+                }
+            
+                this.sendCommand('led', this.ledValues);
+        }
 }

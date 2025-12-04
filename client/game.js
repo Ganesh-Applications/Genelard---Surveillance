@@ -129,7 +129,7 @@ function addMission(mission)
                     +       '<div class="alert-flash"></div>'
                 +       '</div>'
                     +       '<div class="mission-image">'
-                    +               '<img src="img/objects/' + mission.object.key + '.svg" alt=""/>'
+                    +               '<img src="/client/img/objects/' + mission.object.key + '.svg" alt=""/>'
                     +       '</div>'
                 + '</div>'
         );
@@ -142,9 +142,7 @@ function addMission(mission)
         
         missionElt.hide().slideDown();
         
-        let appearDuration = 250;
-        
-        missionElt.hide().slideDown(appearDuration);
+        let appearDuration = 400;
         
         setTimeout(function()
         {
