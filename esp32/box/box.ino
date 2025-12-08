@@ -131,7 +131,7 @@ void updateLED(JsonDocument color)
 void updateSensorsStatus()
 {
   //-- Mesures actuelles
-  String newrfidSensorValue = getrfidSensorValue();
+  String newrfidSensorValue = getRfidSensorValue();
   float newFrontSensorValue = getDistance(IR_SENSOR_FRONT);
   delay(50);
   float newBackSensorValue = getDistance(IR_SENSOR_BACK);
@@ -198,7 +198,7 @@ float getDistance(int sensorPin)
 /**
  * Retourne l'UID de la carte RFID si présente, sinon "none"
  */
-String getrfidSensorValue()
+String getRfidSensorValue()
 {
   // Envoi de la commande "Q\r\n" au lecteur
   Serial1.print("Q\r\n");
@@ -208,7 +208,7 @@ String getrfidSensorValue()
   
   // Attendre que le lecteur renvoie des données (il faut peut-être ajuster ce délai)
   unsigned long startTime = millis();
-  while (millis() - startTime < 100) {  // Attente de 2 secondes (ajuster si nécessaire)
+  while (millis() - startTime < 40) {  // Attente de 2 secondes (ajuster si nécessaire)
     if (Serial1.available()) {
       char c = Serial1.read();  // Lire le caractère reçu
       rfidData += c;  // Ajouter à la chaîne

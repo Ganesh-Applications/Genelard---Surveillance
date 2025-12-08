@@ -61,8 +61,6 @@ void loop()
         inputString += c;
       }
     }
-
-    delay(50);
 }
 
 /**

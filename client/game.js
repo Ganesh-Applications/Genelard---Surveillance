@@ -123,6 +123,9 @@ function addMission(mission)
                     +       '<div class="mission-title">'
                     +               'Cache ' + mission.object.name + ' ' + mission.boxName
                     +       '</div>'
+                    +       '<div class="mission-status">'
+                    // +               "Dépose l'objet dans la cache..."
+                    +       '</div>'
                     +       '<div class="mission-time">'
                     +               MISSION_START_TIME
                     +       '</div>'

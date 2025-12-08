@@ -24,6 +24,8 @@ export default class Patrols
                         this.updatePatrols.bind(this),
                         40
                 );
+                
+                this.updatePatrolMode();
         }
         
         stop()
@@ -35,8 +37,6 @@ export default class Patrols
         {
                 if (!this.running)
                         return;
-                
-                // console.log('updatePatrols');
                 
                 // inertie sur la vitesse de déplacement des patrouilles
                 let speedInertia = PATROL_MODES[this.patrolMode].inertia;

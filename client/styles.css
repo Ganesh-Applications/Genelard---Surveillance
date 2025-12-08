@@ -288,6 +288,12 @@ body {
         line-height: normal;
         transition:all 1.5s;
 }
+#game .missions .mission .mission-bar .mission-status {
+        font-weight: normal;
+        font-size: 22px;
+        flex-grow: 1;
+        padding-top: 11px;
+}
 #game .missions .mission[data-time-status="medium"] .mission-bar .mission-title {
         color:/*#CC533E*/#cd8436;
 }
@@ -360,6 +366,46 @@ body {
 }
 #game .missions .mission.success .mission-bar {
         background:#fff;
+}
+
+.boxes {
+    position: absolute;
+    bottom: -30px;
+    width:100%;
+}
+.boxes .box {
+    position:absolute;
+    background:#fff;
+    padding:8px;
+    border-radius:5px;
+    font-family:Anisette;
+    font-size:18px;
+    bottom: 30px;
+    transform:translateX(-50%);
+}
+.boxes .box:nth-child(1) {
+    left:12.5%;
+}
+.boxes .box:nth-child(2) {
+    left:37.5%;
+}
+.boxes .box:nth-child(3) {
+    left:62.5%;
+}
+.boxes .box:nth-child(4) {
+    left:87.5%;
+}
+.boxes .box:after {
+    content:'';
+    position:absolute;
+    top: 100%;
+    left: 10px;
+     display : inline-block;
+     height : 0;
+     width : 0;
+ border-top : 15px solid #fff;
+ border-right : 6.7px solid transparent;
+ border-left : 8.3px solid transparent;
 }
 
 .simulators {

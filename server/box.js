@@ -10,7 +10,7 @@ export default class Box extends ESPHandler
                         name: "front",
                         currentValue: 0,
                         history: [],
-                        idleMin: 90,
+                        idleMin: 80,
                         idleMax: 200,
                         inside: false
                 }
@@ -18,12 +18,12 @@ export default class Box extends ESPHandler
                         name: "back",
                         currentValue: 0,
                         history: [],
-                        idleMin: 90,
+                        idleMin: 80,
                         idleMax: 200,
                         inside: false
                 }
                 
-                this.objectInside = 'none';
+                this.objectInside = false;
                 
                 this.handInside = false;
                 
@@ -32,16 +32,22 @@ export default class Box extends ESPHandler
         
         updateData(json)
         {
-            console.log('updateData', json);
+                //console.log('updateData', json);
             
                 // if (json.front_sensor_value !== this.frontSensor.currentValue)
                 this.determineHandPresence(this.frontSensor, json.front_sensor_value);
                 
                 // if (json.back_sensor_value !== this.backSensor.currentValue)
                 this.determineHandPresence(this.backSensor, json.back_sensor_value);
+            
+                this.handInside = this.frontSensor.inside || this.backSensor.inside;
                 
-                if (json.rfid_sensor_value !== this.objectInside && json.rfid_sensor_value != 'Q')
-                        this.updateRfid(json.rfid_sensor_value);
+                let rfidSensorValue = json.rfid_sensor_value.trim();
+                
+                if (rfidSensorValue == 'Q')
+                        this.updateRfid(false);
+                else if (rfidSensorValue !== this.objectInside)
+                        this.updateRfid(rfidSensorValue);
                 
                 if (this.eventListener != null)
                         this.eventListener.onBoxUpdate();
@@ -96,7 +102,7 @@ export default class Box extends ESPHandler
         updateRfid(value)
         {
                 this.objectInside = value;
-                //console.log("RFID:", value);
+                //console.log(this.id + ", RFID:", value);
         }
         
         // --- Commandes pratiques ---

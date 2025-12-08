@@ -13,11 +13,15 @@ export default class GameManager
                 //-- création des boîtes
                 this.boxes = [];
                 for (let i in BOXES)
-                        this.boxes.push(new Box(
-                                BOXES[i].name,
-                                BOXES[i].path,
-                                this.io
-                        ));
+                {
+                        let box = new Box(
+                            BOXES[i].name,
+                            BOXES[i].path,
+                            this.io
+                        );
+                        box.eventListener = this;
+                        this.boxes.push(box);
+                }
                         
                 //-- liste d'objets restants (on en enlève au fur et à mesure des missions)
                 this.remainingObjects = [];
@@ -35,6 +39,19 @@ export default class GameManager
 
                 //-- création des patrouilles
                 this.patrols = new Patrols(this);
+        }
+        
+        onBoxUpdate(box)
+        {
+            let hasObjectInside = false;
+            for (let i in this.boxes)
+            {
+                let box = this.boxes[i];
+                if (box.objectInside)
+                    hasObjectInside = true;
+            }
+            
+            this.io.emit('object_inside', hasObjectInside);
         }
         
         startGame()

@@ -33,9 +33,12 @@ export default class Leds extends ESPHandler
 
                 //-- boîtes qui contiennent des objets : jaune
                 for (let box in this.boxes)
-                        if (this.boxes[box].objectInside != 'none')
+                        if (this.boxes[box].handInside != false)
                                 for (let i = box * NUM_LEDS_PER_BOX; i < box * NUM_LEDS_PER_BOX + NUM_LEDS_PER_BOX; i++)
-                                        this.ledValues[i] = this.getColor(255, 255 - this.redFactors[i], 0, this.flashValue);
+                                {
+                                        let boxIndex = NUM_LEDS - i; // <- inversé sur le bandeau LED
+                                        this.ledValues[boxIndex] = this.getColor(255, 255 - this.redFactors[boxIndex], 0, this.flashValue);
+                                }
 
                 //-- définit les valeurs des leds
                 const patrolIndices = [patrolsPos - 1, patrolsPos, patrolsPos + 1];

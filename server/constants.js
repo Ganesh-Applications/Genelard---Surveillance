@@ -48,7 +48,7 @@ export const LED_COLORS = {
 };
 
 export const NUM_BOX = 4;
-export const NUM_LEDS_PER_BOX = 10; // tmp
+export const NUM_LEDS_PER_BOX = 8;
 export const NUM_LEDS = NUM_LEDS_PER_BOX * NUM_BOX;
 
 //-- différents modes de patrouilles
