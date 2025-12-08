@@ -3,7 +3,7 @@
 //#include <SPI.h>
 
 #define LED_PIN 1
-#define NUM_LEDS 40
+#define NUM_LEDS 68
 #define BRIGHTNESS 255
 #define LED_TYPE WS2812B
 #define COLOR_ORDER GRB
@@ -30,6 +30,11 @@ void setup()
 
 void loop()
 {
+
+        fill_solid(leds, NUM_LEDS, CRGB::Green);
+
+            FastLED.show();
+return;
     /*if (Serial.available())
     {
         // Lit la ligne JSON complète
@@ -124,7 +129,7 @@ void updateLEDs(JsonDocument doc)
 
     //fadeToBlackBy(leds, NUM_LEDS, 60);
 
-    //fill_solid(leds+ledPos, 1, CRGB::Red4);
+    // fill_solid(leds+ledPos, 1, CRGB::Red4);
 
     //float brightness = 127f;
     //fadeToBlackBy(&leds[20], 1, 255-brightness);
