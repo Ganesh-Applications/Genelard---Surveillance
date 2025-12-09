@@ -3,7 +3,9 @@
 //#include <SPI.h>
 
 #define LED_PIN 1
-#define NUM_LEDS 68
+#define NUM_LEDS 69
+#define START_LED 9
+
 #define BRIGHTNESS 255
 #define LED_TYPE WS2812B
 #define COLOR_ORDER GRB
@@ -115,7 +117,7 @@ void updateLEDs(JsonDocument doc)
         Serial.print(a);
         Serial.println();*/
 
-        leds[i] = CRGB(
+        leds[START_LED + i] = CRGB(
             (r * a) >> 8,
             (g * a) >> 8,
             (b * a) >> 8
