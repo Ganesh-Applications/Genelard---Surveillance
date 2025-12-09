@@ -30,11 +30,6 @@ void setup()
 
 void loop()
 {
-
-        fill_solid(leds, NUM_LEDS, CRGB::Green);
-
-            FastLED.show();
-return;
     /*if (Serial.available())
     {
         // Lit la ligne JSON complète
